@@ -1,3 +1,4 @@
+import { formatTime } from "@/lib/utils";
 import { useState, useEffect } from "react";
 
 interface TimerProps {
@@ -40,15 +41,6 @@ export default function Timer({
   useEffect(() => {
     setTimeLeft(initialTime); // 초기 시간이 변경되면 타이머를 다시 설정
   }, [initialTime]);
-
-  // 분:초 형식으로 변환하는 함수
-  const formatTime = (time: number | null) => {
-    if (time === null) return "Unlimited";
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-    return `${minutes}:${formattedSeconds}`;
-  };
 
   return (
     <div>

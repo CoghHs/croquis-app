@@ -3,13 +3,12 @@ import Link from "next/link";
 
 interface CategoryListProps {
   query: string;
+  text: string;
 }
 
-export default async function CategoryList({ query }: CategoryListProps) {
+export default async function CategoryList({ query, text }: CategoryListProps) {
   const data = await fetchPoses(query);
   const pose = data.results[0];
-
-  // 동적인 링크 생성: [category]/[id] 구조로 링크
   const dynamicLink = `/${query}/${pose.id}`;
 
   return (
