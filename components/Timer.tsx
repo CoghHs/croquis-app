@@ -32,7 +32,7 @@ export default function Timer({
     }
 
     return () => clearInterval(interval); // interval 해제
-  }, [timeLeft, isRunning, isPaused]);
+  }, [timeLeft, isRunning, isPaused, onTimeout]);
 
   const handlePause = () => {
     setIsPaused(!isPaused); // 일시정지 상태 토글

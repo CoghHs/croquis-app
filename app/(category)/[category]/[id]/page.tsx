@@ -1,10 +1,21 @@
-"use client"; // 클라이언트 컴포넌트로 설정
+"use client";
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation"; // usePathname 임포트
 import { fetchPoses, fetchPoseById } from "@/lib/constants";
 import Timer from "@/components/Timer";
 import TimerButton from "@/components/TimerButton";
+import Image from "next/image";
+import TimerControls from "@/components/TimerControls";
+import NavigationButtons from "@/components/NavigationButton";
+
+interface PoseProps {
+  id: string;
+  urls: {
+    full: string;
+  };
+  alt_description: string;
+}
 
 export default function PoseDetail() {
   const pathname = usePathname(); // 현재 경로를 가져옴
@@ -14,8 +25,8 @@ export default function PoseDetail() {
   const category = pathParts ? pathParts[1] : undefined;
   const id = pathParts ? pathParts[2] : undefined;
 
-  const [poses, setPoses] = useState<any[]>([]);
-  const [pose, setPose] = useState<any | null>(null);
+  const [poses, setPoses] = useState<PoseProps[]>([]);
+  const [pose, setPose] = useState<PoseProps | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [selectedTime, setSelectedTime] = useState<number | null>(null);
@@ -36,7 +47,7 @@ export default function PoseDetail() {
 
         // 해당 포즈의 인덱스 설정
         const initialIndex = posesData.results.findIndex(
-          (pose: any) => pose.id === id
+          (pose: PoseProps) => pose.id === id
         );
         setCurrentIndex(initialIndex);
       } catch (error) {
@@ -83,19 +94,15 @@ export default function PoseDetail() {
 
   return (
     <div className="flex flex-col items-center">
-      <img
+      <Image
         src={pose.urls.full}
         alt={pose.alt_description}
+        width={500}
+        height={500} // 실제 너비와 높이에 맞춰 조정
         className="w-1/3 h-auto mb-4"
       />
 
-      <div className="mb-4">
-        <TimerButton time={60} label="1 Min" onClick={handleTimeChange} />
-        <TimerButton time={180} label="3 Min" onClick={handleTimeChange} />
-        <TimerButton time={300} label="5 Min" onClick={handleTimeChange} />
-        <TimerButton time={600} label="10 Min" onClick={handleTimeChange} />
-        <TimerButton time={null} label="Unlimited" onClick={handleTimeChange} />
-      </div>
+      <TimerControls handleTimeChange={handleTimeChange} />
 
       {selectedTime !== null && !isTimerRunning && (
         <div className="flex flex-col items-center mb-4">
@@ -117,20 +124,10 @@ export default function PoseDetail() {
         />
       )}
 
-      <div className="flex gap-4 mt-4">
-        <button
-          className="bg-gray-500 text-white px-4 py-2 rounded"
-          onClick={handlePrevious}
-        >
-          Prev
-        </button>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-          onClick={handleNext}
-        >
-          Next
-        </button>
-      </div>
+      <NavigationButtons
+        handleNext={handleNext}
+        handlePrevious={handlePrevious}
+      />
     </div>
   );
 }
