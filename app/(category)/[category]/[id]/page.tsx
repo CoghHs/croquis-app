@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { fetchPoses } from "@/lib/constants";
+import { fetchPoses, fetchRandomPoses } from "@/lib/constants";
 import Timer from "@/components/Timer";
 import Image from "next/image";
 import TimerControls from "@/components/TimerControls";
@@ -35,16 +35,15 @@ export default function PoseDetail() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery<PosePage>({
       queryKey: ["poses", category],
-      queryFn: ({ pageParam = 1 }) =>
-        fetchPoses(category as string, 10, pageParam as number),
+      queryFn: ({ pageParam = 1 }) => fetchRandomPoses(category as string, 10), // pageParam을 받지 않고 랜덤 페이지 요청
       getNextPageParam: (lastPage, allPages) => {
-        const nextPage = allPages.length + 1;
+        // 랜덤 페이지 처리: 각 페이지마다 새로운 랜덤 페이지를 요청
+        const nextPage = Math.floor(Math.random() * lastPage.totalPages) + 1;
         return nextPage <= lastPage.totalPages ? nextPage : undefined;
       },
       enabled: !!category,
-      initialPageParam: 1,
+      initialPageParam: 1, // 첫 페이지 시작
     });
-
   const poses = data?.pages.flatMap((page) => page.results) || [];
   const pose = poses[currentIndex];
 
