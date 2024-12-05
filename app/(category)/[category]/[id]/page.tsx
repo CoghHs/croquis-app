@@ -102,7 +102,7 @@ export default function PoseDetail() {
 
       {selectedTime !== null && !isTimerRunning && (
         <div className="flex flex-col items-center mb-4">
-          <p className="text-lg">Selected Time: {selectedTime}</p>
+          <p className="text-lg">Selected Time: {selectedTime / 60} Min</p>
           <button
             className="bg-green-500 text-white px-4 py-2 rounded mt-4"
             onClick={startTimer}

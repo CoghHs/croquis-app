@@ -43,9 +43,9 @@ export default function Timer({
   }, [initialTime]);
 
   return (
-    <div>
+    <div className="flex flex-col justify-center items-center">
       {/* 타이머 시간 표시 */}
-      <p className="text-lg mb-4">Time Left: {formatTime(timeLeft)}</p>
+      <p className="text-lg mb-4">{formatTime(timeLeft)}</p>
 
       {/* 일시정지/재개 버튼 */}
       {timeLeft !== null && (
