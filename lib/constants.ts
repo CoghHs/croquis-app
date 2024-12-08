@@ -29,7 +29,7 @@ export async function fetchRandomPoses(
   perPage: number = 10
 ) {
   // 페이지 번호를 랜덤하게 선택 (1부터 totalPages까지)
-  const totalPages = 30; // 예시로 30 페이지라고 가정 (API에서 totalPages 값을 받아올 수 있다면 동적으로 처리 가능)
+  const totalPages = 50; // 예시로 30 페이지라고 가정 (API에서 totalPages 값을 받아올 수 있다면 동적으로 처리 가능)
   const randomPage = Math.floor(Math.random() * totalPages) + 1;
 
   const response = await fetch(

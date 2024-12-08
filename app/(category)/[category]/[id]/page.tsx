@@ -35,14 +35,14 @@ export default function PoseDetail() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery<PosePage>({
       queryKey: ["poses", category],
-      queryFn: ({ pageParam = 1 }) => fetchRandomPoses(category as string, 10), // pageParam을 받지 않고 랜덤 페이지 요청
+      queryFn: ({ pageParam = 1 }) => fetchRandomPoses(category as string, 10),
       getNextPageParam: (lastPage, allPages) => {
-        // 랜덤 페이지 처리: 각 페이지마다 새로운 랜덤 페이지를 요청
         const nextPage = Math.floor(Math.random() * lastPage.totalPages) + 1;
         return nextPage <= lastPage.totalPages ? nextPage : undefined;
       },
+
       enabled: !!category,
-      initialPageParam: 1, // 첫 페이지 시작
+      initialPageParam: 1,
     });
   const poses = data?.pages.flatMap((page) => page.results) || [];
   const pose = poses[currentIndex];

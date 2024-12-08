@@ -18,7 +18,7 @@ export default function TimerControls({
         onChange={handleSelectChange}
         className="py-2 bg-gray-500 text-white rounded"
       >
-        <option value={60}>1 Min</option>
+        <option value={10}>1 Min</option>
         <option value={180}>3 Min</option>
         <option value={300}>5 Min</option>
         <option value={600}>10 Min</option>
