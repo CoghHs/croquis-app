@@ -29,20 +29,21 @@ export default function PoseDetail() {
   const category = pathParts ? pathParts[1] : undefined;
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [selectedTime, setSelectedTime] = useState<number | null>(null);
+  const [selectedTime, setSelectedTime] = useState<number>(60); // 기본 시간 1분(60초)으로 설정
   const [isTimerRunning, setIsTimerRunning] = useState(false);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery<PosePage>({
       queryKey: ["poses", category],
-      queryFn: ({ pageParam = 1 }) => fetchRandomPoses(category as string, 10),
+      queryFn: ({ pageParam = 1 }) => fetchRandomPoses(category as string, 10), // pageParam을 받지 않고 랜덤 페이지 요청
       getNextPageParam: (lastPage, allPages) => {
+        // 랜덤 페이지 처리: 각 페이지마다 새로운 랜덤 페이지를 요청
         const nextPage = Math.floor(Math.random() * lastPage.totalPages) + 1;
         return nextPage <= lastPage.totalPages ? nextPage : undefined;
       },
 
       enabled: !!category,
-      initialPageParam: 1,
+      initialPageParam: 1, // 첫 페이지 시작
     });
   const poses = data?.pages.flatMap((page) => page.results) || [];
   const pose = poses[currentIndex];
@@ -57,7 +58,7 @@ export default function PoseDetail() {
   // 타이머 초기화 함수
   const resetTimer = () => {
     setIsTimerRunning(false);
-    setSelectedTime(null);
+    setSelectedTime(60); // 리셋 시에도 기본 시간을 1분으로 설정
   };
 
   const handleNext = () => {
@@ -77,13 +78,19 @@ export default function PoseDetail() {
   };
 
   const handleTimeChange = (time: number | null) => {
-    setSelectedTime(time);
+    setSelectedTime(time ?? 60); // 타이머 변경 시에도 기본 시간을 1분으로 설정
     setIsTimerRunning(false);
   };
 
   const startTimer = () => {
     setIsTimerRunning(true);
   };
+
+  useEffect(() => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, []);
 
   if (isLoading || !pose) return <div>Loading...</div>;
 
